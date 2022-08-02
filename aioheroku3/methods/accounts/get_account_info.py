@@ -20,7 +20,7 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-import herokupy
+import aioheroku3
 from typing import Dict, Union
 
 
@@ -29,7 +29,7 @@ class GetAccountInfo:
         self.account_name = None
 
     async def get_account_info(
-        self: "herokupy.Heroku"
+        self: "aioheroku3.Heroku"
     ):
         url = f"{self.base_url}account"
         async with self.s(headers=self.headers) as ses, ses.get(url) as res:

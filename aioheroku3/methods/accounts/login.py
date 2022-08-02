@@ -20,17 +20,16 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from aiohttp import ClientSession
-from herokupy.methods import Methods
+import aioheroku3
+from aioheroku3.errors import InvalidToken
 
 
-class Heroku(Methods):
-    def __init__(self, token: str):
-        super().__init__()
-        self.token = token
-        self.s = ClientSession
-        self.headers = {
-            "Accept": "application/vnd.heroku+json; version=3",
-            "Authorization": f"Bearer {self.token}"
-        }
-        self.base_url = "https://api.heroku.com/"
+class Login:
+    async def login(
+        self: "aioheroku3.Heroku"
+    ):
+        async with self.s(headers=self.headers) as ses, ses.get(f"{self.base_url}account/rate-limits") as res:
+            status_code = res.status
+            if status_code != 200:
+                raise InvalidToken()
+            return True
